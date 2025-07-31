@@ -1,15 +1,16 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Feliz dia mi amor </title>
+  <title>Feliz día mi amor</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
       margin: 0;
       padding: 0;
       background-color: #fce4ec;
+      overflow: hidden;
     }
     .screen {
       display: none;
@@ -58,9 +59,47 @@
       text-align: left;
       font-family: 'Comic Sans MS', cursive, sans-serif;
       line-height: 1.6;
+      position: relative;
+      z-index: 1;
     }
     .notepad h3 {
       margin-top: 0;
+    }
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      transform: rotate(45deg);
+      animation: floatUp 5s linear infinite;
+      opacity: 0.7;
+    }
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      border-radius: 50%;
+    }
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+    .heart::after {
+      top: 0;
+      left: -10px;
+    }
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(1) rotate(45deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) scale(1.5) rotate(45deg);
+        opacity: 0;
+      }
     }
   </style>
 </head>
@@ -69,17 +108,16 @@
   <h2>🔒 Enter password</h2>
   <div class="input-display" id="inputDisplay">••••</div>
   <div class="keypad">
-   <button class="key" onclick="enterDigit('1')">1</button>
-  <button class="key" onclick="enterDigit('2')">2</button>
-  <button class="key" onclick="enterDigit('3')">3</button>
-  <button class="key" onclick="enterDigit('4')">4</button>
-  <button class="key" onclick="enterDigit('5')">5</button>
-  <button class="key" onclick="enterDigit('6')">6</button>
-  <button class="key" onclick="enterDigit('7')">7</button>
-  <button class="key" onclick="enterDigit('8')">8</button>
-  <button class="key" onclick="enterDigit('9')">9</button>
-  <button class="key" onclick="deleteDigit()">←</button> <!-- ← Botón borrar -->
-    <div></div>
+    <button class="key" onclick="enterDigit('1')">1</button>
+    <button class="key" onclick="enterDigit('2')">2</button>
+    <button class="key" onclick="enterDigit('3')">3</button>
+    <button class="key" onclick="enterDigit('4')">4</button>
+    <button class="key" onclick="enterDigit('5')">5</button>
+    <button class="key" onclick="enterDigit('6')">6</button>
+    <button class="key" onclick="enterDigit('7')">7</button>
+    <button class="key" onclick="enterDigit('8')">8</button>
+    <button class="key" onclick="enterDigit('9')">9</button>
+    <button class="key" onclick="deleteDigit()">←</button>
     <button class="key" onclick="enterDigit('0')">0</button>
     <div></div>
   </div>
@@ -93,7 +131,7 @@
       , amo cada recuerdo que tengo contigo, a tu lado todo es mejor, me hiciste ser mejor persona, cada momento en que yo la paso mal tú siempre estás ahí para consolarme 
     </p>
     <p>
-      es de las mejores cosas que me pudieron haber pasado en la vida, a pesar de tomo seguimos juntos como el equipo que somos. eres lo que siempre quise, amo todo de ti, 
+      s de las mejores cosas que me pudieron haber pasado en la vida, a pesar de tomo seguimos juntos como el equipo que somos. eres lo que siempre quise, amo todo de ti, 
       A tu lado aprendí lo que es el amor verdadero, estoy agradecido de cada pequeño detalle que tienes conmigo, por apoyarme y nunca dejarme solo. Gracias por estar siempre conmigo, por darme tu
       tiempo, tu cariño, tu comprensión, eres lo que siempre quise,amo todo de ti.
     </p>
@@ -107,6 +145,7 @@
     </p>
   </div>
 </div>
+<audio id="bgMusic" src="audio/micancion.mp3" loop></audio>
 <script>
   const correctPassword = '2203';
   let input = '';
@@ -120,6 +159,8 @@
       if (input === correctPassword) {
         document.getElementById('passwordScreen').classList.remove('active');
         document.getElementById('notepadScreen').classList.add('active');
+        document.getElementById('bgMusic').play();
+        generateHearts();
       } else {
         alert('Contraseña incorrecta, intenta de nuevo');
         input = '';
@@ -130,7 +171,7 @@
 
   function deleteDigit() {
     if (input.length > 0) {
-      input = input.slice(0, -1); // Borra el último número
+      input = input.slice(0, -1);
       updateDisplay();
     }
   }
@@ -139,22 +180,18 @@
     const display = document.getElementById('inputDisplay');
     display.textContent = input.padEnd(4, '•');
   }
-  function enterDigit(digit) {
-    if (input.length < 4) {
-      input += digit;
-    }
-    const display = document.getElementById('inputDisplay');
-    display.textContent = input.padEnd(4, '•');
-    if (input.length === 4) {
-      if (input === correctPassword) {
-        document.getElementById('passwordScreen').classList.remove('active');
-        document.getElementById('notepadScreen').classList.add('active');
-      } else {
-        alert('Contraseña incorecta, intenta de nuevo');
-        input = '';
-        display.textContent = '••••';
-      }
-    }
+
+  function generateHearts() {
+    setInterval(() => {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (3 + Math.random() * 2) + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => {
+        heart.remove();
+      }, 5000);
+    }, 300);
   }
 </script>
 </body>
