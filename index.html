@@ -69,15 +69,16 @@
   <h2>🔒 Enter password</h2>
   <div class="input-display" id="inputDisplay">••••</div>
   <div class="keypad">
-    <button class="key" onclick="enterDigit('1')">1</button>
-    <button class="key" onclick="enterDigit('2')">2</button>
-    <button class="key" onclick="enterDigit('3')">3</button>
-    <button class="key" onclick="enterDigit('4')">4</button>
-    <button class="key" onclick="enterDigit('5')">5</button>
-    <button class="key" onclick="enterDigit('6')">6</button>
-    <button class="key" onclick="enterDigit('7')">7</button>
-    <button class="key" onclick="enterDigit('9')">9</button>
-    <button class="key" onclick="enterDigit('8')">8</button>
+   <button class="key" onclick="enterDigit('1')">1</button>
+  <button class="key" onclick="enterDigit('2')">2</button>
+  <button class="key" onclick="enterDigit('3')">3</button>
+  <button class="key" onclick="enterDigit('4')">4</button>
+  <button class="key" onclick="enterDigit('5')">5</button>
+  <button class="key" onclick="enterDigit('6')">6</button>
+  <button class="key" onclick="enterDigit('7')">7</button>
+  <button class="key" onclick="enterDigit('8')">8</button>
+  <button class="key" onclick="enterDigit('9')">9</button>
+  <button class="key" onclick="deleteDigit()">←</button> <!-- ← Botón borrar -->
     <div></div>
     <button class="key" onclick="enterDigit('0')">0</button>
     <div></div>
@@ -108,6 +109,35 @@
 <script>
   const correctPassword = '2203';
   let input = '';
+
+  function enterDigit(digit) {
+    if (input.length < 4) {
+      input += digit;
+    }
+    updateDisplay();
+    if (input.length === 4) {
+      if (input === correctPassword) {
+        document.getElementById('passwordScreen').classList.remove('active');
+        document.getElementById('notepadScreen').classList.add('active');
+      } else {
+        alert('Contraseña incorrecta, intenta de nuevo');
+        input = '';
+        updateDisplay();
+      }
+    }
+  }
+
+  function deleteDigit() {
+    if (input.length > 0) {
+      input = input.slice(0, -1); // Borra el último número
+      updateDisplay();
+    }
+  }
+
+  function updateDisplay() {
+    const display = document.getElementById('inputDisplay');
+    display.textContent = input.padEnd(4, '•');
+  }
   function enterDigit(digit) {
     if (input.length < 4) {
       input += digit;
